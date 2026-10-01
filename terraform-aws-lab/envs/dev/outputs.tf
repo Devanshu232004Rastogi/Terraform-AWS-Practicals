@@ -8,3 +8,10 @@ output "vpc_id" {
 # output "private_subnetids" {
 #   value = aws_subnet.private_subnet[*].id
 # }
+
+
+output "private_subnetids" {
+value = {  
+    for k, s in aws_subnet.private_subnet :
+        k=> s.id }
+}
