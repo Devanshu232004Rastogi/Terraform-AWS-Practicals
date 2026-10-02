@@ -55,3 +55,4 @@ output "nacls_id" {
     private_nacl_id = aws_network_acl.private_nacl.id
   }
 }
+# output "flow_log_group" { value = aws_cloudwatch_log_group.vpc_flow_log_grp.name }
