@@ -92,3 +92,73 @@ resource "aws_vpc_security_group_ingress_rule" "db_app_inbound" {
   to_port                      = var.db_port
 
 }
+# -------------------------------NACLs---------------------------
+
+
+# --------------------------Public Nacl --------------------------------------
+
+resource "aws_network_acl" "public_nacl" {
+  vpc_id = aws_vpc.main_vpc.id
+
+  tags = {
+    Name = "${local.name_prefixes}-public-nacl"
+  }
+
+}
+
+# --------------------------Public Nacl Association--------------------------------------
+
+resource "aws_network_acl_association" "public_nacl_assocaiation" {
+  for_each       = aws_subnet.public_subnet
+  network_acl_id = aws_network_acl.public_nacl.id
+  subnet_id      = each.value.id
+}
+
+# --------------------------Public Nacl rules--------------------------------------
+
+resource "aws_network_acl_rule" "public_nacl_rules" {
+  for_each       = local.public_nacl_rules
+  network_acl_id = aws_network_acl.public_nacl.id
+  rule_number    = each.value.num
+  egress         = each.value.egress
+  from_port      = each.value.from
+  to_port        = each.value.to
+  protocol       = "tcp"
+  cidr_block     = each.value.cidr
+  rule_action    = "allow"
+
+}
+
+
+# --------------------------Private Nacl --------------------------------------
+
+resource "aws_network_acl" "private_nacl" {
+  vpc_id = aws_vpc.main_vpc.id
+
+  tags = {
+    Name = "${local.name_prefixes}-private-nacl"
+  }
+
+}
+
+# --------------------------Private Nacl Association--------------------------------------
+
+resource "aws_network_acl_association" "private_nacl_assocaiation" {
+  for_each       = aws_subnet.private_subnet
+  network_acl_id = aws_network_acl.private_nacl.id
+  subnet_id      = each.value.id
+}
+
+# --------------------------Private Nacl rules--------------------------------------
+resource "aws_network_acl_rule" "private_nacl_rules" {
+  for_each       = local.private_nacl_rules
+  network_acl_id = aws_network_acl.private_nacl.id
+  rule_number    = each.value.num
+  egress         = each.value.egress
+  from_port      = each.value.from
+  to_port        = each.value.to
+  protocol       = "tcp"
+  cidr_block     = each.value.cidr
+  rule_action    = "allow"
+
+}

@@ -48,3 +48,10 @@ output "security_group_id" {
 
   }
 }
+
+output "nacls_id" {
+  value = {
+    public_nacl_id  = aws_network_acl.public_nacl.id
+    private_nacl_id = aws_network_acl.private_nacl.id
+  }
+}
