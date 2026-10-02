@@ -10,8 +10,27 @@ output "vpc_id" {
 # }
 
 
+output "public_subnetids" {
+  value = {
+    for k, s in aws_subnet.public_subnet :
+  k => s.id }
+}
 output "private_subnetids" {
-value = {  
+  value = {
     for k, s in aws_subnet.private_subnet :
-        k=> s.id }
+  k => s.id }
+}
+
+
+output "gw_id" {
+  value = aws_internet_gateway.lab-main-gw.id
+}
+
+output "public_rt_id" {
+  value = aws_route_table.public_rt.id
+}
+output "private_rt_id" {
+  value = {
+    for k, rt in aws_route_table.private_rt : k => rt.id
+  }
 }

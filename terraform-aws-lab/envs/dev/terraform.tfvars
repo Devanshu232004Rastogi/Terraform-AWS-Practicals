@@ -17,11 +17,11 @@ az_netnum_map_public = {
 az_netnum_map_private = {
 
   "a" = {
-    az = "us-east-1a"
+    az     = "us-east-1a"
     netnum = 10
   }
   "b" = {
-    az = "us-east-1b"
+    az     = "us-east-1b"
     netnum = 11
   }
 }

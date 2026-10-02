@@ -27,3 +27,7 @@ variable "az_netnum_map_private" {
   }))
 }
 
+variable "enable_nat" {
+  type    = bool
+  default = false
+}
