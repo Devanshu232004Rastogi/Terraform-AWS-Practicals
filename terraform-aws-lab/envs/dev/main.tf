@@ -115,3 +115,19 @@ resource "aws_route" "private-subner-nat" {
 
 
 }
+
+
+# -------------------vpc endpoint for s3 -gateway -----------------------
+
+data "aws_region" "current" {}
+
+resource "aws_vpc_endpoint" "s3_vpc_ep" {
+  vpc_id            = aws_vpc.main_vpc.id
+  vpc_endpoint_type = "Gateway"
+  service_name      = "com.amazonaws.${data.aws_region.current.name}.s3"
+  route_table_ids   = [for rt in aws_route_table.private_rt : rt.id]
+  tags              = { Name = "${local.name_prefixes}-vpc_endpoint_for_s3" }
+
+
+}
+
