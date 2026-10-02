@@ -85,33 +85,33 @@ resource "aws_route_table_association" "Private_rt_association" {
 
 
 resource "aws_eip" "nat-gw-eip" {
-  for_each = var.enable_nat? aws_subnet.public_subnet : {}
-  domain = "vpc"
+  for_each = var.enable_nat ? aws_subnet.public_subnet : {}
+  domain   = "vpc"
   tags = {
-        Name = "${local.name_prefixes}-eip${each.key}"
+    Name = "${local.name_prefixes}-eip${each.key}"
 
   }
 }
 
 # ---------------------------Nat gateways]---------------------------
 resource "aws_nat_gateway" "main_nat-gw" {
-   for_each = var.enable_nat ? aws_subnet.public_subnet : {}
+  for_each = var.enable_nat ? aws_subnet.public_subnet : {}
 
-  allocation_id = aws_eip.nat_eip[each.key].id
+  allocation_id = aws_eip.nat-gw-eip[each.key].id
   subnet_id     = each.value.id
 
   tags = { Name = "${local.name_prefixes}-nat-${each.key}" }
 
-  depends_on = [aws_internet_gateway.igw]
+  depends_on = [aws_internet_gateway.lab-main-gw]
 }
 
 
 # ---------------------private subnet route---------------------------------
 resource "aws_route" "private-subner-nat" {
-  for_each = var.enable_nat? aws-route_table_id.private_rt : {}
-  route_table_id = each.value.id
+  for_each               = var.enable_nat ? aws_route_table.private_rt : {}
+  route_table_id         = each.value.id
   destination_cidr_block = "0.0.0.0/0"
-  nat_gateway_id = aws_nat_gateway.main_nat-gw[each.key].id
+  nat_gateway_id         = aws_nat_gateway.main_nat-gw[each.key].id
 
 
 }

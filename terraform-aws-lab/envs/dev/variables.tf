@@ -31,3 +31,12 @@ variable "enable_nat" {
   type    = bool
   default = false
 }
+
+variable "app_port" {
+  type    = number
+  default = 8080
+}
+variable "db_port" {
+  type    = number
+  default = 3306
+}

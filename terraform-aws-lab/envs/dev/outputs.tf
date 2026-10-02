@@ -34,3 +34,17 @@ output "private_rt_id" {
     for k, rt in aws_route_table.private_rt : k => rt.id
   }
 }
+
+output "nat_public_ips" {
+  value = { for k, e in aws_eip.nat-gw-eip : k => e.public_ip }
+}
+
+output "security_group_id" {
+  value = {
+    alb_sg_id = aws_security_group.alb_sg.id
+    app_sg_id = aws_security_group.app_sg.id
+    db_sg_id  = aws_security_group.db_sg.id
+
+
+  }
+}
