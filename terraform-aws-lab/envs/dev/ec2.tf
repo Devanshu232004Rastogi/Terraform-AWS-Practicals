@@ -27,7 +27,7 @@ resource "aws_instance" "ec2" {
   vpc_security_group_ids = [aws_security_group.app_sg.id]
   iam_instance_profile   = aws_iam_instance_profile.instance_profile_main.name
 
-  associate_public_ip_address = false
+  associate_public_ip_address = true
 
   root_block_device {
     volume_size           = 8

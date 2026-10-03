@@ -69,3 +69,6 @@ output "ssh_private_key" {
   value     = tls_private_key.privateKey.public_key_openssh
   sensitive = true
 }
+
+output "external_vol" { value = aws_ebs_volume.external_vol.id }
+output "snapshot_id" { value = aws_ebs_snapshot.external_vol_snapshot.id }
