@@ -60,3 +60,12 @@ output "nacls_id" {
 output "s3_endpoint_id" { value = aws_vpc_endpoint.s3_vpc_ep.id }
 
 output "ec2_instance_profile" { value = aws_iam_instance_profile.instance_profile_main.name }
+
+output "ec2_id" { value = aws_instance.ec2.id }
+output "ec2_private_ip" { value = aws_instance.ec2.private_ip }
+output "ami_used" { value = data.aws_ami.latest_al2023.id }
+
+output "ssh_private_key" {
+  value     = tls_private_key.privateKey.public_key_openssh
+  sensitive = true
+}

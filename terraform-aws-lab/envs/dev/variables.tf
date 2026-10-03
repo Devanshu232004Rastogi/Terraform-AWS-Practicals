@@ -40,3 +40,9 @@ variable "db_port" {
   type    = number
   default = 3306
 }
+
+
+variable "instance_type" {
+  type    = string
+  default = "t3.micro"
+}
