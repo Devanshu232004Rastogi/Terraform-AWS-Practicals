@@ -58,3 +58,5 @@ output "nacls_id" {
 # output "flow_log_group" { value = aws_cloudwatch_log_group.vpc_flow_log_grp.name }
 
 output "s3_endpoint_id" { value = aws_vpc_endpoint.s3_vpc_ep.id }
+
+output "ec2_instance_profile" { value = aws_iam_instance_profile.instance_profile_main.name }
