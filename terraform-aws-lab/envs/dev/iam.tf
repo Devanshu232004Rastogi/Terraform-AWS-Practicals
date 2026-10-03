@@ -43,3 +43,48 @@ resource "aws_iam_instance_profile" "instance_profile_main" {
   role = aws_iam_role.ec2_s3_role.name
   name = "${local.name_prefixes}-ec2_iam_profile"
 }
+
+
+# -------------------iam related DLM--------------------------------------------
+
+data "aws_iam_policy_document" "trust_policy_dlm" {
+  statement {
+    actions = ["sts:AssumeRole"]
+    principals {
+      type        = "Service"
+      identifiers = ["dlm.amazonaws.com"]
+    }
+  }
+}
+
+resource "aws_iam_role" "ebs_dlm_role" {
+  name               = "${local.name_prefixes}-dlm_role"
+  assume_role_policy = data.aws_iam_policy_document.trust_policy_dlm.json
+}
+
+
+data "aws_iam_policy_document" "permission_policy_dlm" {
+  statement {
+    actions = [
+      "ec2:CreateSnapshot",
+      "ec2:CreateSnapshots",
+      "ec2:DeleteSnapshot",
+      "ec2:DescribeVolumes",
+      "ec2:DescribeInstances",
+      "ec2:DescribeSnapshots",
+    ]
+    resources = ["*"]
+  }
+  statement {
+    actions   = ["ec2:CreateTags"]
+    resources = ["arn:aws:ec2:*::snapshot/*"]
+  }
+}
+
+resource "aws_iam_role_policy" "dlm_role_policy" {
+  name   = "${local.name_prefixes}-dlm_role_policy"
+  role   = aws_iam_role.ebs_dlm_role.id
+  policy = data.aws_iam_policy_document.permission_policy_dlm.json
+
+}
+
